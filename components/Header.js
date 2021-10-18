@@ -23,8 +23,11 @@ export default function Header({ projectsY, percentage }) {
       </S.Slogan>
 
       <S.About>
-        I'm{" "}
-        <S.TextLink href="https://github.com/tiagodinis" target="_blank">
+        I&apos;m{" "}
+        <S.TextLink
+          href="https://github.com/tiagodinis"
+          aria-label="Go to about page"
+        >
           Tiago Dinis.
         </S.TextLink>{" "}
         Frontend developer focused on UX and interactivity.
@@ -51,6 +54,7 @@ export default function Header({ projectsY, percentage }) {
           href="https://github.com/tiagodinis"
           aria-label="Go to github"
           target="_blank"
+          rel="noreferrer"
         >
           <GithubSVG dim={24} />
         </a>
@@ -61,6 +65,7 @@ export default function Header({ projectsY, percentage }) {
           href="https://twitter.com/insofrido"
           aria-label="Go to twitter"
           target="_blank"
+          rel="noreferrer"
         >
           <TwitterSVG dim={24} />
         </a>
@@ -68,6 +73,7 @@ export default function Header({ projectsY, percentage }) {
           href="https://www.linkedin.com/in/tiagoddinis/"
           aria-label="Go to github"
           target="_blank"
+          rel="noreferrer"
         >
           <LinkedInSVG dim={24} />
         </a>

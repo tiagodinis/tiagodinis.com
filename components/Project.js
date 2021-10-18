@@ -36,13 +36,13 @@ export default function Project({ p, i, percentage }) {
         <S.LinksWrapper>
           {p.githubSlug && (
             <S.ProjectLink onClick={() => window.open(p.githubSlug)}>
-              <GithubSVG dim={interps.githubSize} color={"#fafafa"} />
+              <GithubSVG dim={interps.githubSize || 18} color={"#fafafa"} />
             </S.ProjectLink>
           )}
           {p.externalLink && (
             <S.ProjectLink onClick={() => window.open(p.externalLink)}>
               <ExternalLinkSVG
-                dim={interps.externalLinkSize}
+                dim={interps.externalLinkSize || 20}
                 color={"#fafafa"}
               />
             </S.ProjectLink>
