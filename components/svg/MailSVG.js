@@ -1,7 +1,7 @@
 export default function GithubSVG({ dim = "16", color = "white" }) {
   return (
     <svg viewBox="0 0 512 512" width={dim} height={dim} fill={color} role="img">
-      <title>Mail icon</title>
+      <title>Mail</title>
       <path
         d="M508.65,115.988L363.186,261.451l141.875,141.979c4.295-7.385,6.939-15.85,6.939-24.992V133.563
 			C512,127.357,510.722,121.476,508.65,115.988z"

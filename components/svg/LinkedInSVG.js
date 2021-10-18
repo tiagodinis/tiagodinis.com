@@ -7,7 +7,7 @@ export default function GithubSVG({ dim = "16", color = "white" }) {
       fill={color}
       role="img"
     >
-      <title>LinkedIn icon</title>
+      <title>LinkedIn</title>
       <path
         d="M11.185,0.08C5.004,0.08,0.001,5.092,0,11.259c0,6.173,5.003,11.184,11.186,11.184c6.166,0,11.176-5.011,11.176-11.184
 			C22.362,5.091,17.351,0.08,11.185,0.08z"
