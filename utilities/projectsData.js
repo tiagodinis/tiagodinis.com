@@ -23,7 +23,7 @@ export default [
     externalLink: "https://pocketcalculator.netlify.app/",
     imgPath: calculator,
     imgAlt: "An expression example on the calculator",
-    bgColor: "#403a46",
+    bgColor: "#47414e",
   },
   {
     name: "INSOFRIDO.COM",
@@ -33,7 +33,7 @@ export default [
     imgPath: insofrido,
     imgAlt:
       "An interactive poem where dots animate from a selection of user choices",
-    bgColor: "#d7b5b7",
+    bgColor: "#d1aaac",
   },
   {
     name: "KENDO WARRIORS",
