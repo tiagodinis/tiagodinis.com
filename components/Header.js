@@ -3,9 +3,19 @@ import GithubSVG from "./svg/GithubSVG";
 import TwitterSVG from "./svg/TwitterSVG";
 import LinkedInSVG from "./svg/LinkedInSVG";
 import MailSVG from "./svg/MailSVG";
+import ConditionalWrapper from "../utilities/components/ConditionalWrapper";
 
-export default function Header({ projectsY, percentage }) {
+export default function Header({ projectsY, percentage, isSplitLayout }) {
   const interps = S.getHeaderInterpolations(percentage);
+
+  function handleExploreProjects() {
+    if (isSplitLayout) return;
+    window.scrollTo({ top: projectsY, behavior: "smooth" });
+  }
+
+  const mobileLink = (children) => (
+    <S.TextLink onClick={handleExploreProjects}>{children}</S.TextLink>
+  );
 
   return (
     <S.Header style={{ "--headerLeftMargin": `${interps.headerLeftMargin}px` }}>
@@ -33,13 +43,9 @@ export default function Header({ projectsY, percentage }) {
         Frontend developer focused on UX and interactivity.
         <br />
         <br />
-        <S.TextLink
-          onClick={() =>
-            window.scrollTo({ top: projectsY, behavior: "smooth" })
-          }
-        >
+        <ConditionalWrapper condition={!isSplitLayout} wrapper={mobileLink}>
           Take a look
-        </S.TextLink>{" "}
+        </ConditionalWrapper>{" "}
         at my work, and feel free to{" "}
         <S.TextLink
           href="mailto:tiagoddinis@gmail.com"

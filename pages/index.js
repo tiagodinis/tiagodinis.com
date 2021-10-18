@@ -17,18 +17,19 @@ export default function Home() {
   const afterHeaderEl = useRef();
 
   useLayoutEffect(() => {
+    // Set layout and corresponding interpolation percentage
     const newIsSplitLayout = width >= 992;
     setIsSplitLayout(newIsSplitLayout);
-
-    // Get interpolated values and project start Y target
     const percentageRange = newIsSplitLayout ? [900, 1800] : [480, 992];
     setPercentage(clamp(getPercentage(width, ...percentageRange), 0, 1));
-    if (!isSplitLayout)
-      setAfterHeaderY(
-        afterHeaderEl.current.getBoundingClientRect().y + window.scrollY
-      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
+
+  useLayoutEffect(() => {
+    if (isSplitLayout) return;
+    const afterHeaderRect = afterHeaderEl.current.getBoundingClientRect();
+    setAfterHeaderY(afterHeaderRect.y + window.scrollY);
+  }, [isSplitLayout]);
 
   return (
     <>
@@ -39,7 +40,11 @@ export default function Home() {
           <S.HomepageWrapper>{children}</S.HomepageWrapper>
         )}
       >
-        <Header projectsY={afterHeaderY} percentage={percentage} />
+        <Header
+          projectsY={afterHeaderY}
+          percentage={percentage}
+          isSplitLayout={isSplitLayout}
+        />
 
         {!isSplitLayout && <div ref={afterHeaderEl} />}
 
