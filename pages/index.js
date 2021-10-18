@@ -27,6 +27,7 @@ export default function Home() {
       setAfterHeaderY(
         afterHeaderEl.current.getBoundingClientRect().y + window.scrollY
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
 
   return (

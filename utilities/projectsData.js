@@ -13,6 +13,7 @@ export default [
     githubSlug: "https://github.com/tiagodinis/notion-flashcards",
     externalLink: "https://notion-flashcards.herokuapp.com/",
     imgPath: flashcards,
+    imgAlt: "A training session of a 'TV Pop Culture Trivia' flashcard set",
     bgColor: "#8575d0",
   },
   {
@@ -21,6 +22,7 @@ export default [
     githubSlug: "https://github.com/tiagodinis/calculator",
     externalLink: "https://pocketcalculator.netlify.app/",
     imgPath: calculator,
+    imgAlt: "An expression example on the calculator",
     bgColor: "#403a46",
   },
   {
@@ -29,6 +31,8 @@ export default [
     githubSlug: "https://github.com/tiagodinis/insofrido",
     externalLink: "https://insofrido.com",
     imgPath: insofrido,
+    imgAlt:
+      "An interactive poem where dots animate from a selection of user choices",
     bgColor: "#d7b5b7",
   },
   {
@@ -36,6 +40,8 @@ export default [
     description: "Kendo themed mini-game",
     externalLink: "https://i.imgur.com/AXn859r.gif",
     imgPath: kendo,
+    imgAlt:
+      "Two kendokas fight - the one to the right blocks the opponent's strike to his head",
     bgColor: "#AC5C6C",
   },
   {
@@ -43,6 +49,8 @@ export default [
     description: "Hardcore platformer prototype",
     externalLink: "https://youtu.be/Hdfng36DgX0",
     imgPath: deltanaut,
+    imgAlt:
+      "A black 3-eyed robot jumps in the air, dodgin two rockets, in an arena filled with hazards",
     bgColor: "#40a0ae",
   },
   {
@@ -50,6 +58,7 @@ export default [
     description: "Flexible GPU-based particle library",
     githubSlug: "https://github.com/tiagodinis/GParticles",
     imgPath: particles,
+    imgAlt: "Fuzzy green particles disperse in a spherical pattern",
     bgColor: "#44824C",
   },
   {
@@ -57,6 +66,8 @@ export default [
     description: "Don't Starve Together item mod",
     githubSlug: "https://github.com/tiagodinis/TelewarperStaff",
     imgPath: telewarper,
+    imgAlt:
+      "Don't Starve Together crafting menu shows the player he is able to craft the Telewarper Staff",
     bgColor: "#92774B",
   },
 ];

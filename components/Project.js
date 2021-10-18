@@ -24,6 +24,7 @@ export default function Project({ p, i, percentage }) {
           className={styles.previewImage}
           src={p.imgPath}
           layout="responsive"
+          alt={p.alt}
         />
         {/* <Overlay>
                 <p>Go to project page</p>
