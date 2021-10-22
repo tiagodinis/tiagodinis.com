@@ -3,12 +3,14 @@ import Image from "next/image";
 import styles from "../styles/previewImage.module.css";
 import GithubSVG from "../components/svg/GithubSVG";
 import ExternalLinkSVG from "../components/svg/ExternalLinkSVG";
+import { forwardRef } from "react";
 
-export default function Project({ p, i, percentage }) {
+export const Project = forwardRef(({ p, i, percentage }, ref) => {
   const interps = S.getProjectInterpolations(percentage);
 
   return (
     <S.Project
+      ref={ref}
       color={p.bgColor}
       style={{
         "--padding": `${interps.padding}px`,
@@ -26,7 +28,6 @@ export default function Project({ p, i, percentage }) {
           layout="responsive"
           alt={p.alt}
           quality="100"
-          placeholder="blur"
         />
         {/* <Overlay>
                 <p>Go to project page</p>
@@ -54,4 +55,4 @@ export default function Project({ p, i, percentage }) {
       </S.Details>
     </S.Project>
   );
-}
+});

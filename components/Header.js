@@ -5,20 +5,16 @@ import LinkedInSVG from "./svg/LinkedInSVG";
 import MailSVG from "./svg/MailSVG";
 import ConditionalWrapper from "../utilities/components/ConditionalWrapper";
 
-export default function Header({ projectsY, percentage, isSplitLayout }) {
-  const interps = S.getHeaderInterpolations(percentage);
+export default function Header(props) {
+  const interps = S.getHeaderInterpolations(props.percentage);
 
   function handleExploreProjects() {
-    if (isSplitLayout) return;
-    window.scrollTo({ top: projectsY, behavior: "smooth" });
+    if (props.isSplitLayout) return;
+    window.scrollTo({ top: props.projectsY, behavior: "smooth" });
   }
 
-  const mobileLink = (children) => (
-    <S.TextLink onClick={handleExploreProjects}>{children}</S.TextLink>
-  );
-
   return (
-    <S.Header style={{ "--headerLeftMargin": `${interps.headerLeftMargin}px` }}>
+    <S.Header style={{ "--headerLeft": `${interps.headerLeft}px` }}>
       <S.Slogan
         style={{
           "--heroLHeight": `${interps.heroLHeight}rem`,
@@ -34,16 +30,18 @@ export default function Header({ projectsY, percentage, isSplitLayout }) {
 
       <S.About>
         I&apos;m{" "}
-        <S.TextLink
-          href="https://github.com/tiagodinis"
-          aria-label="Go to about page"
-        >
+        <S.TextLink onClick={props.goToAbout} aria-label="Go to about page">
           Tiago Dinis.
         </S.TextLink>{" "}
         Frontend developer focused on UX and interactivity.
         <br />
         <br />
-        <ConditionalWrapper condition={!isSplitLayout} wrapper={mobileLink}>
+        <ConditionalWrapper
+          condition={!props.isSplitLayout}
+          wrapper={(children) => (
+            <S.TextLink onClick={handleExploreProjects}>{children}</S.TextLink>
+          )}
+        >
           Take a look
         </ConditionalWrapper>{" "}
         at my work, and feel free to{" "}
