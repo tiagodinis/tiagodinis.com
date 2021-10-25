@@ -1,31 +1,21 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
 import { lerp } from "../utilities/math";
 
 export const getHeaderInterpolations = (percentage) => ({
-  headerLeft: lerp(percentage, 44, 80),
+  headerLeft: lerp(percentage, 44, 90),
   heroFSize: lerp(percentage, 44, 54),
   heroLHeight: lerp(percentage, 3.4, 4.2),
 });
 
-export const Test = styled(motion.div)`
-  width: 100px;
-  height: 100px;
-  background-color: red;
-  border-radius: 10px;
-
-  transform: translateY(-20px);
-`;
-
 export const Header = styled.header`
   @media (min-width: 992px) {
+    width: 40%;
     height: fit-content;
     margin: 0;
-
+    padding-left: var(--headerLeft);
     position: sticky;
     top: 0px;
-    left: var(--headerLeft);
-    transform: translateY(calc(100vh - 100% - 14vh));
+    transform: translateY(calc(100vh - 100% - 10vh));
   }
 
   margin: 56px 48px 56px 44px;
@@ -60,7 +50,7 @@ export const About = styled.nav`
   }
 
   @media (min-width: 992px) {
-    max-width: 316px;
+    max-width: 310px;
   }
 
   margin: 36px 0px;

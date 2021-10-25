@@ -13,37 +13,15 @@ export default function Home() {
   const { width } = useWindowSize();
   const [isSplitLayout, setIsSplitLayout] = useState(false);
   const [percentage, setPercentage] = useState(0);
+  const router = useRouter();
+  const observer = useRef();
+  const refList = useRef([]);
+  const topmostIndex = useRef(0);
   const [afterHeaderY, setAfterHeaderY] = useState(0);
   const afterHeaderEl = useRef();
 
-  const [topmostIndex, setTopmostIndex] = useState(0);
-  const observer = useRef();
-  const refList = useRef([]);
-  const router = useRouter();
-
-  function goToAbout() {
-    const topmostRect = refList.current[topmostIndex].getBoundingClientRect();
-    const offset = Math.round(Math.abs(topmostRect.top));
-    router.push(`/about?index=${topmostIndex}&offset=${offset}`);
-  }
-
-  useEffect(() => {
-    observer.current = new IntersectionObserver((entries) => {
-      entries.forEach((e) =>
-        e.target.setAttribute("visible", e.isIntersecting)
-      );
-
-      const isVisible = (r) => r.getAttribute("visible") === "true";
-      setTopmostIndex(refList.current.findIndex(isVisible));
-    });
-
-    refList.current.forEach((r) => observer.current.observe(r));
-
-    return () => observer.current.disconnect();
-  }, []);
-
+  // Set layout and corresponding interpolation percentage
   useLayoutEffect(() => {
-    // Set layout and corresponding interpolation percentage
     const newIsSplitLayout = width >= 992;
     setIsSplitLayout(newIsSplitLayout);
     const percentageRange = newIsSplitLayout ? [900, 1800] : [480, 992];
@@ -51,31 +29,57 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
 
+  // When returning to this page, set scroll position to the previous one
   useLayoutEffect(() => {
     if (!isSplitLayout || !router.query.index) return;
 
     let top = refList.current[router.query.index].getBoundingClientRect().top;
     let scrollTarget = Math.round(top + parseInt(router.query.offset));
-    console.log(scrollTarget);
     window.scrollTo({ top: scrollTarget, behavior: "instant" });
   }, [isSplitLayout]);
 
-  // // FIXME: resize and see its not working properly
-  // useEffect(() => {
-  //   if (isSplitLayout) return;
-  //   const afterHeaderRect = afterHeaderEl.current.getBoundingClientRect();
-  //   setAfterHeaderY(afterHeaderRect.y + window.scrollY);
-  // }, [isSplitLayout]);
+  // Observe project refs and keep a register of the topmost visible one
+  useEffect(() => {
+    observer.current = new IntersectionObserver((entries) => {
+      entries.forEach((e) =>
+        e.target.setAttribute("visible", e.isIntersecting)
+      );
+      const isVisible = (r) => r.getAttribute("visible") === "true";
+      topmostIndex.current = refList.current.findIndex(isVisible);
+    });
+
+    refList.current.forEach((r) => observer.current.observe(r));
+
+    return () => observer.current.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (isSplitLayout) return;
+    const afterHeaderRect = afterHeaderEl.current.getBoundingClientRect();
+    console.log(Math.round(afterHeaderRect.y + window.scrollY));
+    setAfterHeaderY(Math.round(afterHeaderRect.y + window.scrollY));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width]);
+
+  function goToAbout() {
+    const topmostRef = refList.current[topmostIndex.current];
+    const offset = Math.round(Math.abs(topmostRef.getBoundingClientRect().top));
+    router.push(`/about?index=${topmostIndex.current}&offset=${offset}`);
+  }
+
+  function scrollToProjects() {
+    window.scrollTo({ top: afterHeaderY, behavior: "smooth" });
+  }
 
   return (
     <>
       <MetaHead />
       <S.HomepageWrapper>
         <Header
-          projectsY={afterHeaderY}
           percentage={percentage}
           isSplitLayout={isSplitLayout}
           goToAbout={goToAbout}
+          goToProjects={isSplitLayout ? null : scrollToProjects}
         />
 
         {!isSplitLayout && <div ref={afterHeaderEl} />}
@@ -94,13 +98,4 @@ export default function Home() {
       </S.HomepageWrapper>
     </>
   );
-}
-
-{
-  /* <ConditionalWrapper
-condition={isSplitLayout}
-wrapper={(children) => (
-  <S.HomepageWrapper>{children}</S.HomepageWrapper>
-)}
-> */
 }

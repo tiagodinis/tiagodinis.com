@@ -1,4 +1,3 @@
-import { AnimateSharedLayout } from "framer-motion";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -13,9 +12,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
-      <AnimateSharedLayout>
-        <Component {...pageProps} />
-      </AnimateSharedLayout>
+      <Component {...pageProps} />
     </>
   );
 }

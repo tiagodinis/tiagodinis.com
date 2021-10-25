@@ -1,26 +1,15 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/dist/client/router";
 import useWindowSize from "../utilities/custom_hooks/useWindowSize";
 import { clamp, getPercentage } from "../utilities/math";
-import ConditionalWrapper from "../utilities/components/ConditionalWrapper";
 import Header from "../components/Header";
 import { Project } from "../components/Project";
 import * as S from "../styles";
 import MetaHead from "../components/MetaHead";
-
+import DoubleArrowSVG from "../components/svg/DoubleArrowSVG";
 import projectsData from "../utilities/projectsData";
-
 import { lerp, ease } from "../utilities/math";
-
-function easeOutBounce(x) {
-  const n1 = 7.5625;
-  const d1 = 2.75;
-
-  if (x < 1 / d1) return n1 * x * x;
-  else if (x < 2 / d1) return n1 * (x -= 1.5 / d1) * x + 0.75;
-  else if (x < 2.5 / d1) return n1 * (x -= 2.25 / d1) * x + 0.9375;
-  else return n1 * (x -= 2.625 / d1) * x + 0.984375;
-}
+import { Shake2D } from "../utilities/shake2d";
 
 export default function About() {
   const { width } = useWindowSize();
@@ -30,40 +19,46 @@ export default function About() {
   const afterHeaderEl = useRef();
 
   const router = useRouter();
+  const fromHome =
+    router.query.index !== undefined && router.query.offset !== undefined;
   const index = parseInt(router.query.index);
   const offset = parseInt(router.query.offset);
-  const [useElems, setUseElems] = useState(true);
-  const [introAnimFinished, setIntroAnimFinished] = useState(false);
+  const [useProjects, setUseProjects] = useState(fromHome);
 
-  useLayoutEffect(() => startAnim(), []);
+  useLayoutEffect(() => {
+    if (fromHome) startAnim();
+  }, []);
 
   const startAnim = () =>
     animateScroll(
       window.innerHeight + offset,
       0,
-      1800,
-      (x) => easeOutBounce(x),
+      1100,
+      (x) => ease(x, -0.6, 0),
       null,
-      toggle
+      () => {
+        setOverflowType("hidden");
+        setUseProjects(!useProjects);
+      }
     );
 
   const endAnim = () =>
     animateScroll(
       0,
       window.innerHeight + offset,
-      1000,
+      800,
       (x) => ease(x, 0.8, 0.1),
-      toggle,
+      () => {
+        // setOverflowType("visible");
+        setUseProjects(!useProjects);
+      },
       () => router.push(`/?index=${index}&offset=${offset}`)
     );
 
-  function toggle() {
-    setUseElems(!useElems);
-    setIntroAnimFinished(!introAnimFinished);
-  }
-
   function animateScroll(start, end, duration, easer, onStart, onFinish) {
     if (onStart) onStart();
+
+    window.scrollTo({ top: window.innerHeight + offset, behavior: "instant" });
 
     let startTimestamp = null;
     window.requestAnimationFrame(step);
@@ -100,36 +95,98 @@ export default function About() {
   //   setAfterHeaderY(afterHeaderRect.y + window.scrollY);
   // }, [isSplitLayout]);
 
+  // Shake
+  const shakeableEl = useRef();
+  const [overflowType, setOverflowType] = useState("visible");
+
+  function shake(amplitude, frequency, duration) {
+    let shake = new Shake2D(amplitude, frequency, duration, (p) =>
+      ease(p, 0, 0)
+    );
+    shake.generateSamples();
+
+    let startTimestamp = null;
+    window.requestAnimationFrame(step);
+    function step(timestamp) {
+      if (!startTimestamp) startTimestamp = timestamp;
+
+      const elapsedTime = timestamp - startTimestamp;
+      const elapsedPercentage = Math.min(elapsedTime / duration, 1);
+      const offsets = shake.compute(elapsedPercentage);
+      shakeableEl.current.style.top = `${offsets.x}px`;
+      shakeableEl.current.style.left = `${offsets.y}px`;
+
+      if (elapsedPercentage < 1) window.requestAnimationFrame(step);
+      else {
+        console.log(offsets);
+        setOverflowType("visible");
+      }
+    }
+  }
+
+  useLayoutEffect(() => {
+    if (overflowType === "hidden") shake(12, 60, 700);
+  }, [overflowType]);
+
   return (
     <>
       <MetaHead />
-      <S.HomepageWrapper>
-        <Header
-          projectsY={afterHeaderY}
-          percentage={percentage}
-          isSplitLayout={isSplitLayout}
-        />
+      <S.ShakeWrapper overflowType={overflowType}>
+        <S.HomepageWrapper ref={shakeableEl}>
+          <Header
+            projectsY={afterHeaderY}
+            percentage={percentage}
+            isSplitLayout={isSplitLayout}
+            goToProjects={endAnim}
+          />
 
-        {!isSplitLayout && <div ref={afterHeaderEl} />}
+          {!isSplitLayout && <div ref={afterHeaderEl} />}
 
-        <S.ProjectsWrapper
-          isSplitLayout={isSplitLayout}
-          introAnimFinished={introAnimFinished}
-        >
-          <S.About onClick={endAnim}>Go back</S.About>
-          {useElems &&
-            projectsData
-              .slice(index)
-              .map((p, i) => (
-                <Project
-                  key={p.name}
-                  p={p}
-                  i={i + index}
-                  percentage={percentage}
-                />
-              ))}
-        </S.ProjectsWrapper>
-      </S.HomepageWrapper>
+          <S.ProjectsWrapper isSplitLayout={isSplitLayout}>
+            <S.About>
+              <S.AboutWrapper>
+                <S.AboutTitle>About me</S.AboutTitle>
+                <S.AboutContent>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                  </p>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                  </p>
+                </S.AboutContent>
+              </S.AboutWrapper>
+              <S.GoBackContainer onClick={endAnim}>
+                <DoubleArrowSVG dim="64" color="#4a4a4a" />
+              </S.GoBackContainer>
+            </S.About>
+            {useProjects &&
+              projectsData
+                .slice(index)
+                .map((p, i) => (
+                  <Project
+                    key={p.name}
+                    p={p}
+                    i={i + index}
+                    percentage={percentage}
+                  />
+                ))}
+          </S.ProjectsWrapper>
+        </S.HomepageWrapper>
+      </S.ShakeWrapper>
     </>
   );
 }
