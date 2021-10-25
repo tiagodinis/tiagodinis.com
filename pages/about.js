@@ -27,7 +27,7 @@ export default function About() {
 
   useLayoutEffect(() => {
     if (fromHome) startAnim();
-  }, []);
+  }, [fromHome]);
 
   const startAnim = () =>
     animateScroll(

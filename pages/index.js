@@ -36,6 +36,7 @@ export default function Home() {
     let top = refList.current[router.query.index].getBoundingClientRect().top;
     let scrollTarget = Math.round(top + parseInt(router.query.offset));
     window.scrollTo({ top: scrollTarget, behavior: "instant" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSplitLayout]);
 
   // Observe project refs and keep a register of the topmost visible one
