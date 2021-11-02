@@ -129,22 +129,23 @@ export default function About() {
                 <SA.AboutTitle>About</SA.AboutTitle>
                 <SA.AboutIntro>
                   <p>
-                    💻 I'm a Software engineer based in Portugal, with game
+                    💻 I&apos;m a Software engineer based in Portugal, with game
                     development and teaching experience.
                   </p>
                   <p>
-                    ❤️ I'm passionate about interactive systems and everything
-                    UI/UX.
+                    ❤️ I&apos;m passionate about interactive systems and
+                    everything UI/UX.
                   </p>
                   <p>💡 I like to make and I like to solve.</p>
                   <p>
-                    🤹‍♂️ I have many interests. Recently, I've been writing,
+                    🤹‍♂️ I have many interests. Recently, I&apos;ve been writing,
                     creative coding, and Brazilian Jiu Jitsu-ing.
                   </p>
                   <p>
-                    👋 I'm looking for frontend web development opportunities.{" "}
+                    👋 I&apos;m looking for frontend web development
+                    opportunities.{" "}
                     <TextLink href="documents/tiagodinis_resume.pdf">
-                      Here's my resume.
+                      Here&apos;s my resume.
                     </TextLink>
                   </p>
                 </SA.AboutIntro>

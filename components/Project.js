@@ -5,7 +5,7 @@ import GithubSVG from "../components/svg/GithubSVG";
 import ExternalLinkSVG from "../components/svg/ExternalLinkSVG";
 import { forwardRef } from "react";
 
-export const Project = forwardRef(({ p, i, percentage }, ref) => {
+const Project = forwardRef(({ p, i, percentage }, ref) => {
   const interps = S.getProjectInterpolations(percentage);
 
   return (
@@ -56,3 +56,6 @@ export const Project = forwardRef(({ p, i, percentage }, ref) => {
     </S.Project>
   );
 });
+
+Project.displayName = "Project";
+export default Project;
