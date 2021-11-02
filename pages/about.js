@@ -3,7 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import useWindowSize from "../utilities/custom_hooks/useWindowSize";
 import { clamp, getPercentage } from "../utilities/math";
 import Header from "../components/Header";
-import { Project } from "../components/Project";
+import Project from "../components/Project";
 import * as S from "../styles";
 import * as SA from "../styles/about";
 import MetaHead from "../components/MetaHead";
