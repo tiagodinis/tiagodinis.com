@@ -5,60 +5,71 @@ import { clamp, getPercentage } from "../utilities/math";
 import Header from "../components/Header";
 import { Project } from "../components/Project";
 import * as S from "../styles";
+import * as SA from "../styles/about";
 import MetaHead from "../components/MetaHead";
 import DoubleArrowSVG from "../components/svg/DoubleArrowSVG";
 import projectsData from "../utilities/projectsData";
 import { lerp, ease } from "../utilities/math";
 import { Shake2D } from "../utilities/shake2d";
+import AboutValue, { valuesData } from "../components/AboutValue";
+import SectionTitle from "../components/SectionTitle";
+import TextLink from "../components/TextLink";
 
 export default function About() {
   const { width } = useWindowSize();
   const [isSplitLayout, setIsSplitLayout] = useState(false);
   const [percentage, setPercentage] = useState(0);
-  const [afterHeaderY, setAfterHeaderY] = useState(0);
-  const afterHeaderEl = useRef();
-
   const router = useRouter();
   const fromHome =
     router.query.index !== undefined && router.query.offset !== undefined;
-  const index = parseInt(router.query.index);
-  const offset = parseInt(router.query.offset);
+  const index = parseInt(router.query.index || 0);
+  const offset = parseInt(router.query.offset || 0);
   const [useProjects, setUseProjects] = useState(fromHome);
+  const shakeableEl = useRef();
+  const aboutRef = useRef();
 
   useLayoutEffect(() => {
-    if (fromHome) startAnim();
-  }, [fromHome]);
+    // Set layout and corresponding interpolation percentage
+    const newIsSplitLayout = width >= 992;
+    setIsSplitLayout(newIsSplitLayout);
+    const percentageRange = newIsSplitLayout ? [900, 1800] : [480, 992];
+    setPercentage(clamp(getPercentage(width, ...percentageRange), 0, 1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width]);
 
-  const startAnim = () =>
+  useLayoutEffect(() => {
+    if (percentage) {
+      if (fromHome && isSplitLayout) scrollInto();
+      else if (fromHome && isSplitLayout) scrollInto();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [percentage]);
+
+  const scrollInto = () =>
     animateScroll(
-      window.innerHeight + offset,
+      aboutRef.current.getBoundingClientRect().height + offset,
       0,
       1100,
       (x) => ease(x, -0.6, 0),
       null,
       () => {
-        setOverflowType("hidden");
+        shake(12, 60, 700);
         setUseProjects(!useProjects);
       }
     );
 
-  const endAnim = () =>
+  const scrollOutOf = () =>
     animateScroll(
-      0,
-      window.innerHeight + offset,
+      window.scrollY,
+      aboutRef.current.getBoundingClientRect().height + offset,
       800,
       (x) => ease(x, 0.8, 0.1),
-      () => {
-        // setOverflowType("visible");
-        setUseProjects(!useProjects);
-      },
+      () => setUseProjects(!useProjects),
       () => router.push(`/?index=${index}&offset=${offset}`)
     );
 
   function animateScroll(start, end, duration, easer, onStart, onFinish) {
     if (onStart) onStart();
-
-    window.scrollTo({ top: window.innerHeight + offset, behavior: "instant" });
 
     let startTimestamp = null;
     window.requestAnimationFrame(step);
@@ -79,26 +90,6 @@ export default function About() {
     }
   }
 
-  useLayoutEffect(() => {
-    // Set layout and corresponding interpolation percentage
-    const newIsSplitLayout = width >= 992;
-    setIsSplitLayout(newIsSplitLayout);
-    const percentageRange = newIsSplitLayout ? [900, 1800] : [480, 992];
-    setPercentage(clamp(getPercentage(width, ...percentageRange), 0, 1));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width]);
-
-  // // FIXME: resize and see its not working properly
-  // useEffect(() => {
-  //   if (isSplitLayout) return;
-  //   const afterHeaderRect = afterHeaderEl.current.getBoundingClientRect();
-  //   setAfterHeaderY(afterHeaderRect.y + window.scrollY);
-  // }, [isSplitLayout]);
-
-  // Shake
-  const shakeableEl = useRef();
-  const [overflowType, setOverflowType] = useState("visible");
-
   function shake(amplitude, frequency, duration) {
     let shake = new Shake2D(amplitude, frequency, duration, (p) =>
       ease(p, 0, 0)
@@ -117,62 +108,60 @@ export default function About() {
       shakeableEl.current.style.left = `${offsets.y}px`;
 
       if (elapsedPercentage < 1) window.requestAnimationFrame(step);
-      else {
-        console.log(offsets);
-        setOverflowType("visible");
-      }
     }
   }
-
-  useLayoutEffect(() => {
-    if (overflowType === "hidden") shake(12, 60, 700);
-  }, [overflowType]);
 
   return (
     <>
       <MetaHead />
-      <S.ShakeWrapper overflowType={overflowType}>
+      <SA.ShakeWrapper>
         <S.HomepageWrapper ref={shakeableEl}>
-          <Header
-            projectsY={afterHeaderY}
-            percentage={percentage}
-            isSplitLayout={isSplitLayout}
-            goToProjects={endAnim}
-          />
-
-          {!isSplitLayout && <div ref={afterHeaderEl} />}
-
+          {isSplitLayout && (
+            <Header
+              percentage={percentage}
+              isSplitLayout={isSplitLayout}
+              goToProjects={useProjects ? null : scrollOutOf}
+            />
+          )}
           <S.ProjectsWrapper isSplitLayout={isSplitLayout}>
-            <S.About>
-              <S.AboutWrapper>
-                <S.AboutTitle>About me</S.AboutTitle>
-                <S.AboutContent>
+            <SA.About ref={aboutRef}>
+              <div>
+                <SA.AboutTitle>About</SA.AboutTitle>
+                <SA.AboutIntro>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    💻 I'm a Software engineer based in Portugal, with game
+                    development and teaching experience.
                   </p>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    ❤️ I'm passionate about interactive systems and everything
+                    UI/UX.
                   </p>
-                </S.AboutContent>
-              </S.AboutWrapper>
-              <S.GoBackContainer onClick={endAnim}>
-                <DoubleArrowSVG dim="64" color="#4a4a4a" />
-              </S.GoBackContainer>
-            </S.About>
+                  <p>💡 I like to make and I like to solve.</p>
+                  <p>
+                    🤹‍♂️ I have many interests. Recently, I've been writing,
+                    creative coding, and Brazilian Jiu Jitsu-ing.
+                  </p>
+                  <p>
+                    👋 I'm looking for frontend web development opportunities.{" "}
+                    <TextLink href="documents/tiagodinis_resume.pdf">
+                      Here's my resume.
+                    </TextLink>
+                  </p>
+                </SA.AboutIntro>
+              </div>
+
+              <SectionTitle title={"💎 Values 💎"} />
+              <SA.ValuesGrid>
+                {valuesData.map((d) => (
+                  <AboutValue key={d.title} valueData={d} />
+                ))}
+              </SA.ValuesGrid>
+              {isSplitLayout && (
+                <SA.GoBackContainer onClick={scrollOutOf}>
+                  <DoubleArrowSVG dim="64" color="#4a4a4a" />
+                </SA.GoBackContainer>
+              )}
+            </SA.About>
             {useProjects &&
               projectsData
                 .slice(index)
@@ -186,7 +175,7 @@ export default function About() {
                 ))}
           </S.ProjectsWrapper>
         </S.HomepageWrapper>
-      </S.ShakeWrapper>
+      </SA.ShakeWrapper>
     </>
   );
 }

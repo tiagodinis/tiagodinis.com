@@ -13,8 +13,7 @@ export const Header = styled.header`
     height: fit-content;
     margin: 0;
     padding-left: var(--headerLeft);
-    position: sticky;
-    top: 0px;
+    position: fixed;
     transform: translateY(calc(100vh - 100% - 10vh));
   }
 
@@ -61,21 +60,6 @@ export const About = styled.nav`
   font-weight: 300;
   font-size: 18px;
   color: #2d2d2d;
-`;
-
-export const TextLink = styled.a`
-  display: inline-block;
-
-  font-weight: 500;
-  color: #3b80fe;
-  text-decoration: none;
-
-  &:hover {
-    color: #7ba9fc;
-    cursor: pointer;
-  }
-
-  transition: color 0.2s ease-out;
 `;
 
 export const Social = styled.nav`

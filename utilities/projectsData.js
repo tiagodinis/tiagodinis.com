@@ -18,7 +18,7 @@ export default [
   },
   {
     name: "POCKET CALCULATOR",
-    description: "A pocket calculator",
+    description: "A simple calculator app",
     githubSlug: "https://github.com/tiagodinis/calculator",
     externalLink: "https://pocketcalculator.netlify.app/",
     imgPath: calculator,
@@ -27,7 +27,7 @@ export default [
   },
   {
     name: "INSOFRIDO.COM",
-    description: "Written & Interactive poetry",
+    description: "Written & Interactive poetry site",
     githubSlug: "https://github.com/tiagodinis/insofrido",
     externalLink: "https://insofrido.com",
     imgPath: insofrido,

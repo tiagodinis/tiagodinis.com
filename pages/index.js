@@ -29,7 +29,7 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
 
-  // When returning to this page, set scroll position to the previous one
+  // When returning to this page, set scroll position to the one being used before leaving
   useLayoutEffect(() => {
     if (!isSplitLayout || !router.query.index) return;
 
