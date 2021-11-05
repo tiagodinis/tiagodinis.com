@@ -1,18 +1,18 @@
-import * as S from "../styles/header";
+import ConditionalWrapper from "../utilities/components/ConditionalWrapper";
+import TextLink from "./TextLink";
 import GithubSVG from "./svg/GithubSVG";
 import TwitterSVG from "./svg/TwitterSVG";
 import LinkedInSVG from "./svg/LinkedInSVG";
 import MailSVG from "./svg/MailSVG";
-import ConditionalWrapper from "../utilities/components/ConditionalWrapper";
-import TextLink from "./TextLink";
+import * as H from "../styles/header";
 
 export default function Header({ percentage, goToAbout, goToProjects }) {
-  const interps = S.getHeaderInterpolations(percentage);
+  const interps = H.getHeaderInterpolations(percentage);
 
   return (
     <div>
-      <S.Header style={{ "--headerLeft": `${interps.headerLeft}px` }}>
-        <S.Slogan
+      <H.Header style={{ "--headerLeft": `${interps.headerLeft}px` }}>
+        <H.Slogan
           style={{
             "--heroLHeight": `${interps.heroLHeight}rem`,
             "--heroFSize": `${interps.heroFSize}px`,
@@ -23,9 +23,9 @@ export default function Header({ percentage, goToAbout, goToProjects }) {
           Breaking.
           <br />
           Looking up.
-        </S.Slogan>
+        </H.Slogan>
 
-        <S.About>
+        <H.About>
           I&apos;m{" "}
           <ConditionalWrapper
             condition={goToAbout}
@@ -54,9 +54,9 @@ export default function Header({ percentage, goToAbout, goToProjects }) {
           <TextLink href="mailto:tiagoddinis@gmail.com" label="Send e-mail">
             say hello!
           </TextLink>
-        </S.About>
+        </H.About>
 
-        <S.Social>
+        <H.Social>
           <a
             href="https://github.com/tiagodinis"
             aria-label="Go to github"
@@ -84,8 +84,8 @@ export default function Header({ percentage, goToAbout, goToProjects }) {
           >
             <LinkedInSVG dim={24} />
           </a>
-        </S.Social>
-      </S.Header>
+        </H.Social>
+      </H.Header>
     </div>
   );
 }

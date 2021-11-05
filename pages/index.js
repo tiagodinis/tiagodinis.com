@@ -1,13 +1,11 @@
+import useWindowSize from "../utilities/custom_hooks/useWindowSize";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/dist/client/router";
-import useWindowSize from "../utilities/custom_hooks/useWindowSize";
 import { clamp, getPercentage } from "../utilities/math";
-import Header from "../components/Header";
-import Project from "../components/Project";
-import * as S from "../styles";
 import MetaHead from "../components/MetaHead";
-
-import projectsData from "../utilities/projectsData";
+import Header from "../components/Header";
+import ProjectList from "../components/ProjectList";
+import * as S from "../styles";
 
 export default function Home() {
   const { width } = useWindowSize();
@@ -15,9 +13,8 @@ export default function Home() {
   const [percentage, setPercentage] = useState(0);
   const router = useRouter();
   const observer = useRef();
-  const refList = useRef([]);
-  const topmostIndex = useRef(0);
-  const [afterHeaderY, setAfterHeaderY] = useState(0);
+  const elList = useRef([]);
+  const topmostVisibleIndex = useRef(0);
   const afterHeaderEl = useRef();
 
   // Set layout and corresponding interpolation percentage
@@ -33,7 +30,7 @@ export default function Home() {
   useLayoutEffect(() => {
     if (!isSplitLayout || !router.query.index) return;
 
-    let top = refList.current[router.query.index].getBoundingClientRect().top;
+    let top = elList.current[router.query.index].getBoundingClientRect().top;
     let scrollTarget = Math.round(top + parseInt(router.query.offset));
     window.scrollTo({ top: scrollTarget, behavior: "instant" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,29 +43,27 @@ export default function Home() {
         e.target.setAttribute("visible", e.isIntersecting)
       );
       const isVisible = (r) => r.getAttribute("visible") === "true";
-      topmostIndex.current = refList.current.findIndex(isVisible);
+      topmostVisibleIndex.current = elList.current.findIndex(isVisible);
     });
 
-    refList.current.forEach((r) => observer.current.observe(r));
+    elList.current.forEach((r) => observer.current.observe(r));
 
     return () => observer.current.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (isSplitLayout) return;
-    const afterHeaderRect = afterHeaderEl.current.getBoundingClientRect();
-    console.log(Math.round(afterHeaderRect.y + window.scrollY));
-    setAfterHeaderY(Math.round(afterHeaderRect.y + window.scrollY));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width]);
-
   function goToAbout() {
-    const topmostRef = refList.current[topmostIndex.current];
-    const offset = Math.round(Math.abs(topmostRef.getBoundingClientRect().top));
-    router.push(`/about?index=${topmostIndex.current}&offset=${offset}`);
+    let offset = window.scrollY;
+    if (isSplitLayout) {
+      const topmostRef = elList.current[topmostVisibleIndex.current];
+      offset = Math.round(Math.abs(topmostRef.getBoundingClientRect().top));
+    }
+
+    router.push(`/about?index=${topmostVisibleIndex.current}&offset=${offset}`);
   }
 
   function scrollToProjects() {
+    const afterHeaderRect = afterHeaderEl.current.getBoundingClientRect();
+    const afterHeaderY = Math.round(afterHeaderRect.y + window.scrollY);
     window.scrollTo({ top: afterHeaderY, behavior: "smooth" });
   }
 
@@ -78,7 +73,6 @@ export default function Home() {
       <S.HomepageWrapper>
         <Header
           percentage={percentage}
-          isSplitLayout={isSplitLayout}
           goToAbout={goToAbout}
           goToProjects={isSplitLayout ? null : scrollToProjects}
         />
@@ -86,15 +80,7 @@ export default function Home() {
         {!isSplitLayout && <div ref={afterHeaderEl} />}
 
         <S.ProjectsWrapper isSplitLayout={isSplitLayout}>
-          {projectsData.map((p, i) => (
-            <Project
-              ref={(ref) => (refList.current[i] = ref)}
-              key={p.name}
-              p={p}
-              i={i}
-              percentage={percentage}
-            />
-          ))}
+          <ProjectList elList={elList.current} percentage={percentage} />
         </S.ProjectsWrapper>
       </S.HomepageWrapper>
     </>

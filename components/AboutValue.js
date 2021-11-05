@@ -2,23 +2,16 @@ import styled from "styled-components";
 
 export default function AboutValue({ valueData }) {
   return (
-    <Wrapper>
+    <div>
       <Title>{valueData.title}</Title>
       <QuoteWrapper>
         <Quote>{valueData.quote}&nbsp;</Quote>
         <Author>— {valueData.author}</Author>
       </QuoteWrapper>
       <Description>{valueData.description}</Description>
-    </Wrapper>
+    </div>
   );
 }
-
-const breakpoint = 420;
-
-const Wrapper = styled.div`
-  /* border: 1px solid black; */
-  /* max-width: 300px; */
-`;
 
 const Title = styled.h3`
   padding-bottom: 10px;
@@ -27,7 +20,7 @@ const Title = styled.h3`
 `;
 
 const QuoteWrapper = styled.div`
-  @media (min-width: ${breakpoint}px) {
+  @media (min-width: 420px) {
     position: relative;
     top: -3px;
 

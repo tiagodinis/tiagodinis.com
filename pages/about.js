@@ -1,32 +1,29 @@
-import { useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/dist/client/router";
 import useWindowSize from "../utilities/custom_hooks/useWindowSize";
+import { useLayoutEffect, useRef, useState } from "react";
 import { clamp, getPercentage } from "../utilities/math";
-import Header from "../components/Header";
-import Project from "../components/Project";
-import * as S from "../styles";
-import * as SA from "../styles/about";
-import MetaHead from "../components/MetaHead";
-import DoubleArrowSVG from "../components/svg/DoubleArrowSVG";
-import projectsData from "../utilities/projectsData";
 import { lerp, ease } from "../utilities/math";
 import { Shake2D } from "../utilities/shake2d";
-import AboutValue, { valuesData } from "../components/AboutValue";
-import SectionTitle from "../components/SectionTitle";
-import TextLink from "../components/TextLink";
+import MetaHead from "../components/MetaHead";
+import Header from "../components/Header";
+import AboutSection from "../components/AboutSection";
+import ProjectList from "../components/ProjectList";
+import * as S from "../styles";
 
 export default function About() {
-  const { width } = useWindowSize();
-  const [isSplitLayout, setIsSplitLayout] = useState(false);
-  const [percentage, setPercentage] = useState(0);
   const router = useRouter();
   const fromHome =
     router.query.index !== undefined && router.query.offset !== undefined;
   const index = parseInt(router.query.index || 0);
-  const offset = parseInt(router.query.offset || 0);
+  const offset = useRef(parseInt(router.query.offset || 0));
+  const { width } = useWindowSize();
+  const [isSplitLayout, setIsSplitLayout] = useState(false);
+  const [percentage, setPercentage] = useState(-1);
   const [useProjects, setUseProjects] = useState(fromHome);
+  const [animFinished, setAnimFinished] = useState(!fromHome);
+
   const shakeableEl = useRef();
-  const aboutRef = useRef();
+  const aboutSectionRef = useRef();
 
   useLayoutEffect(() => {
     // Set layout and corresponding interpolation percentage
@@ -38,37 +35,77 @@ export default function About() {
   }, [width]);
 
   useLayoutEffect(() => {
-    if (percentage) {
+    if (percentage >= 0 && !animFinished) {
       if (fromHome && isSplitLayout) scrollInto();
-      else if (fromHome && isSplitLayout) scrollInto();
+      else if (fromHome && !isSplitLayout) scrollIntoHorizontal();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [percentage]);
 
   const scrollInto = () =>
     animateScroll(
-      aboutRef.current.getBoundingClientRect().height + offset,
+      aboutSectionRef.current.getBoundingClientRect().height + offset.current,
       0,
       1100,
       (x) => ease(x, -0.6, 0),
+      true,
       null,
       () => {
         shake(12, 60, 700);
-        setUseProjects(!useProjects);
+        setUseProjects(false);
+        setAnimFinished(true);
       }
     );
 
   const scrollOutOf = () =>
     animateScroll(
       window.scrollY,
-      aboutRef.current.getBoundingClientRect().height + offset,
+      aboutSectionRef.current.getBoundingClientRect().height + offset.current,
       800,
       (x) => ease(x, 0.8, 0.1),
-      () => setUseProjects(!useProjects),
-      () => router.push(`/?index=${index}&offset=${offset}`)
+      true,
+      () => setUseProjects(true),
+      () => router.push(`/?index=${index}&offset=${offset.current}`)
     );
 
-  function animateScroll(start, end, duration, easer, onStart, onFinish) {
+  const scrollIntoHorizontal = () =>
+    animateScroll(
+      window.innerWidth,
+      0,
+      900,
+      (x) => ease(x, 0.7, 0.2),
+      false,
+      () => window.scrollTo({ top: offset.current, behavior: "instant" }),
+      () => {
+        setUseProjects(false);
+        setAnimFinished(true);
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+    );
+
+  const scrollOutOfHorizontal = () =>
+    animateScroll(
+      0,
+      window.innerWidth,
+      900,
+      (x) => ease(x, 0.7, 0.2),
+      false,
+      () => {
+        setUseProjects(true);
+        offset.current = 0;
+      },
+      () => router.push(`/`)
+    );
+
+  function animateScroll(
+    start,
+    end,
+    duration,
+    easer,
+    verticalScroll,
+    onStart,
+    onFinish
+  ) {
     if (onStart) onStart();
 
     let startTimestamp = null;
@@ -83,7 +120,10 @@ export default function About() {
         ? easer(elapsedPercentage)
         : elapsedPercentage;
       const lerpedNewValue = lerp(easedPercentage, start, end);
-      window.scrollTo({ top: lerpedNewValue, behavior: "instant" });
+      window.scrollTo({
+        [verticalScroll ? "top" : "left"]: lerpedNewValue,
+        behavior: "instant",
+      });
 
       if (elapsedPercentage < 1) window.requestAnimationFrame(step);
       else if (onFinish) onFinish();
@@ -91,9 +131,7 @@ export default function About() {
   }
 
   function shake(amplitude, frequency, duration) {
-    let shake = new Shake2D(amplitude, frequency, duration, (p) =>
-      ease(p, 0, 0)
-    );
+    let shake = new Shake2D(amplitude, frequency, duration, (p) => p);
     shake.generateSamples();
 
     let startTimestamp = null;
@@ -111,72 +149,43 @@ export default function About() {
     }
   }
 
+  const About = (
+    <AboutSection
+      ref={aboutSectionRef}
+      isSplitLayout={isSplitLayout}
+      applyTransitionStyle={!isSplitLayout && useProjects}
+      scrollOutOf={isSplitLayout ? scrollOutOf : scrollOutOfHorizontal}
+      width={shakeableEl.current?.getBoundingClientRect().width}
+      offset={offset.current}
+    />
+  );
+
   return (
     <>
       <MetaHead />
-      <SA.ShakeWrapper>
-        <S.HomepageWrapper ref={shakeableEl}>
-          {isSplitLayout && (
+      {/* This div hides vertical scrollbar flicker on shake */}
+      <div style={{ overflow: "hidden" }}>
+        {!isSplitLayout && About}
+        <S.HomepageWrapper
+          ref={shakeableEl}
+          applyTransitionStyle={!isSplitLayout && useProjects}
+          width={aboutSectionRef.current?.getBoundingClientRect().width}
+        >
+          {(isSplitLayout || (!isSplitLayout && useProjects)) && (
             <Header
               percentage={percentage}
-              isSplitLayout={isSplitLayout}
               goToProjects={useProjects ? null : scrollOutOf}
             />
           )}
-          <S.ProjectsWrapper isSplitLayout={isSplitLayout}>
-            <SA.About ref={aboutRef}>
-              <div>
-                <SA.AboutTitle>About</SA.AboutTitle>
-                <SA.AboutIntro>
-                  <p>
-                    💻 I&apos;m a Software engineer based in Portugal, with game
-                    development and teaching experience.
-                  </p>
-                  <p>
-                    ❤️ I&apos;m passionate about interactive systems and
-                    everything UI/UX.
-                  </p>
-                  <p>💡 I like to make and I like to solve.</p>
-                  <p>
-                    🤹‍♂️ I have many interests. Recently, I&apos;ve been writing,
-                    creative coding, and Brazilian Jiu Jitsu-ing.
-                  </p>
-                  <p>
-                    👋 I&apos;m looking for frontend web development
-                    opportunities.{" "}
-                    <TextLink href="documents/tiagodinis_resume.pdf">
-                      Here&apos;s my resume.
-                    </TextLink>
-                  </p>
-                </SA.AboutIntro>
-              </div>
 
-              <SectionTitle title={"💎 Values 💎"} />
-              <SA.ValuesGrid>
-                {valuesData.map((d) => (
-                  <AboutValue key={d.title} valueData={d} />
-                ))}
-              </SA.ValuesGrid>
-              {isSplitLayout && (
-                <SA.GoBackContainer onClick={scrollOutOf}>
-                  <DoubleArrowSVG dim="64" color="#4a4a4a" />
-                </SA.GoBackContainer>
-              )}
-            </SA.About>
-            {useProjects &&
-              projectsData
-                .slice(index)
-                .map((p, i) => (
-                  <Project
-                    key={p.name}
-                    p={p}
-                    i={i + index}
-                    percentage={percentage}
-                  />
-                ))}
+          <S.ProjectsWrapper isSplitLayout={isSplitLayout}>
+            {isSplitLayout && About}
+            {useProjects && (
+              <ProjectList topmostIndex={index} percentage={percentage} />
+            )}
           </S.ProjectsWrapper>
         </S.HomepageWrapper>
-      </SA.ShakeWrapper>
+      </div>
     </>
   );
 }

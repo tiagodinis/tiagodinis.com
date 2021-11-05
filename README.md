@@ -1,3 +1,3 @@
-My personal website. Next.js + Styled components + Framer motion.
+My personal website. Next.js + Styled components.
 
 Live at https://tiagodinis.com/.

@@ -1,14 +1,19 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const ShakeWrapper = styled.div`
-  overflow: hidden;
-`;
-
-const padding = 32;
+const titlePadding = 40;
+const valuesTitleColor = "#4a4a4a";
 
 export const About = styled.div`
-  padding: ${padding}px;
-  padding-bottom: 0px;
+  ${({ applyTransitionStyle, offset }) => {
+    if (applyTransitionStyle)
+      return css`
+        position: absolute;
+        top: ${offset}px;
+      `;
+  }}
+
+  padding: 32px;
+  padding-bottom: ${({ isSplitLayout }) => (isSplitLayout ? 0 : 32)}px;
   min-height: 100vh;
   background-color: #f1f1f1;
   line-height: 26px;
@@ -21,6 +26,11 @@ export const About = styled.div`
   justify-content: space-between;
 `;
 
+export const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const AboutTitle = styled.div`
   line-height: 64px;
   font-family: "Raleway", sans-serif;
@@ -28,8 +38,6 @@ export const AboutTitle = styled.div`
   font-size: 54px;
   color: #4a4a4a;
 `;
-
-const titlePadding = 40;
 
 export const AboutIntro = styled.div`
   p {
@@ -62,4 +70,41 @@ export const GoBackContainer = styled.div`
   svg {
     transition: 0.2s ease;
   }
+`;
+
+export const TitleGoBackContainer = styled.div`
+  position: relative;
+  top: 1px;
+
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+
+  &:hover svg {
+    transform: rotate(90deg) translateY(-10px);
+  }
+  svg {
+    transform: rotate(90deg);
+    transition: 0.2s ease-in-out;
+  }
+`;
+
+export const ValuesTitleWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ValuesTitleLine = styled.div`
+  flex-grow: 1;
+  border-top: 1px solid ${valuesTitleColor};
+`;
+
+export const ValuesTitle = styled.div`
+  padding: 0px 10px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: ${valuesTitleColor};
 `;

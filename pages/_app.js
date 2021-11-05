@@ -7,9 +7,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  /* Avoids horizontal shift when scrollbar disappears after the about page has scrolled up */
   body {
-    overflow-y: scroll;
+    /* When navigating to about ... */
+    overflow-y: scroll; /* ... avoid horizontal shift on desktop scroll-up*/
+    overflow-x: hidden; /* ... hide horizontal scrollbar on mobile side-swipe*/
   }
 `;
 
