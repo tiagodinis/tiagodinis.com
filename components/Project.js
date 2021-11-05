@@ -5,7 +5,7 @@ import ExternalLinkSVG from "../components/svg/ExternalLinkSVG";
 import styles from "../styles/previewImage.module.css";
 import * as P from "../styles/project";
 
-const Project = forwardRef(({ p, i, percentage }, ref) => {
+const Project = forwardRef(({ p, i, percentage, priority }, ref) => {
   const interps = P.getProjectInterpolations(percentage);
 
   return (
@@ -28,6 +28,8 @@ const Project = forwardRef(({ p, i, percentage }, ref) => {
           layout="responsive"
           alt={p.alt}
           quality="100"
+          lazyBoundary="600px"
+          priority={priority}
         />
         {/* <Overlay>
                 <p>Go to project page</p>

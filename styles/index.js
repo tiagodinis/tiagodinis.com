@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const HomepageWrapper = styled.div`
+export const HomepageWrapper = styled.main`
   @media (min-width: 992px) {
     position: relative; /* Allow it to be shaken by shake2d */
 
@@ -18,6 +18,6 @@ export const HomepageWrapper = styled.div`
   }}
 `;
 
-export const ProjectsWrapper = styled.main`
+export const ProjectsWrapper = styled.div`
   width: ${({ isSplitLayout }) => (isSplitLayout ? "60%" : "auto")};
 `;

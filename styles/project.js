@@ -59,7 +59,7 @@ export const Details = styled.section`
   justify-content: space-between;
 `;
 
-export const Description = styled.div`
+export const Description = styled.section`
   opacity: 60%;
 
   font-family: "Work sans", sans-serif;

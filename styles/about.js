@@ -1,9 +1,9 @@
 import styled, { css } from "styled-components";
 
-const titlePadding = 40;
+const titlePadding = 20;
 const valuesTitleColor = "#4a4a4a";
 
-export const About = styled.div`
+export const About = styled.main`
   ${({ applyTransitionStyle, offset }) => {
     if (applyTransitionStyle)
       return css`
@@ -31,7 +31,7 @@ export const TitleWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const AboutTitle = styled.div`
+export const AboutTitle = styled.h1`
   line-height: 64px;
   font-family: "Raleway", sans-serif;
   font-weight: 400;
@@ -39,7 +39,7 @@ export const AboutTitle = styled.div`
   color: #4a4a4a;
 `;
 
-export const AboutIntro = styled.div`
+export const AboutIntro = styled.article`
   p {
     padding-top: 16px;
   }
@@ -47,7 +47,26 @@ export const AboutIntro = styled.div`
   padding-bottom: ${titlePadding}px;
 `;
 
-export const ValuesGrid = styled.div`
+export const ValuesTitleWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ValuesTitleLine = styled.div`
+  flex-grow: 1;
+  border-top: 1px solid ${valuesTitleColor};
+`;
+
+export const ValuesTitle = styled.h2`
+  padding: 0px 10px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: ${valuesTitleColor};
+`;
+
+export const ValuesGrid = styled.article`
   @media (min-width: 1450px) {
     grid: 1fr 1fr / 1fr 1fr;
   }
@@ -59,7 +78,7 @@ export const ValuesGrid = styled.div`
   gap: 40px;
 `;
 
-export const GoBackContainer = styled.div`
+export const GoBackContainer = styled.nav`
   margin: 0 auto;
   padding: 10px;
   cursor: pointer;
@@ -72,7 +91,7 @@ export const GoBackContainer = styled.div`
   }
 `;
 
-export const TitleGoBackContainer = styled.div`
+export const TitleGoBackContainer = styled.nav`
   position: relative;
   top: 1px;
 
@@ -88,23 +107,4 @@ export const TitleGoBackContainer = styled.div`
     transform: rotate(90deg);
     transition: 0.2s ease-in-out;
   }
-`;
-
-export const ValuesTitleWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const ValuesTitleLine = styled.div`
-  flex-grow: 1;
-  border-top: 1px solid ${valuesTitleColor};
-`;
-
-export const ValuesTitle = styled.div`
-  padding: 0px 10px;
-  font-family: "Raleway", sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-  color: ${valuesTitleColor};
 `;

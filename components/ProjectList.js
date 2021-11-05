@@ -4,15 +4,18 @@ import styled from "styled-components";
 export default function ProjectList({ elList, topmostIndex, percentage }) {
   return (
     <>
-      {projectsData.slice(topmostIndex).map((p, i) => (
-        <Project
-          ref={elList ? (ref) => (elList[i] = ref) : null}
-          key={p.name}
-          p={p}
-          i={i + (topmostIndex ? topmostIndex : 0)}
-          percentage={percentage}
-        />
-      ))}
+      <article>
+        {projectsData.slice(topmostIndex).map((p, i) => (
+          <Project
+            ref={elList ? (ref) => (elList[i] = ref) : null}
+            key={p.name}
+            p={p}
+            i={i + (topmostIndex ? topmostIndex : 0)}
+            percentage={percentage}
+            priority={i === 0}
+          />
+        ))}
+      </article>
       <Footer>© 2021 Tiago Dinis</Footer>
     </>
   );

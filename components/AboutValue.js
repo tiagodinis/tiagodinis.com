@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 export default function AboutValue({ valueData }) {
   return (
-    <div>
+    <article>
       <Title>{valueData.title}</Title>
       <QuoteWrapper>
         <Quote>{valueData.quote}&nbsp;</Quote>
         <Author>— {valueData.author}</Author>
       </QuoteWrapper>
       <Description>{valueData.description}</Description>
-    </div>
+    </article>
   );
 }
 
