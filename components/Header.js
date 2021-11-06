@@ -6,18 +6,11 @@ import LinkedInSVG from "./svg/LinkedInSVG";
 import MailSVG from "./svg/MailSVG";
 import * as H from "../styles/header";
 
-export default function Header({ percentage, goToAbout, goToProjects }) {
-  const interps = H.getHeaderInterpolations(percentage);
-
+export default function Header({ goToAbout, goToProjects }) {
   return (
     <div>
-      <H.Header style={{ "--headerLeft": `${interps.headerLeft}px` }}>
-        <H.Slogan
-          style={{
-            "--heroLHeight": `${interps.heroLHeight}rem`,
-            "--heroFSize": `${interps.heroFSize}px`,
-          }}
-        >
+      <H.Header>
+        <H.Slogan>
           Making.
           <br />
           Breaking.

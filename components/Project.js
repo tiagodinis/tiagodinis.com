@@ -9,15 +9,8 @@ const Project = forwardRef(({ p, i, percentage, priority }, ref) => {
   const interps = P.getProjectInterpolations(percentage);
 
   return (
-    <P.Project
-      ref={ref}
-      color={p.bgColor}
-      style={{
-        "--padding": `${interps.padding}px`,
-        "--paddingBottom": `${interps.paddingBottom}px`,
-      }}
-    >
-      <P.Title style={{ "--titleFSize": `${interps.titleFSize}px` }}>
+    <P.Project ref={ref} color={p.bgColor}>
+      <P.Title>
         <P.Index>{`00${i + 1} ~`}&nbsp;</P.Index>
         <P.Name>{p.name}</P.Name>
       </P.Title>
@@ -36,9 +29,7 @@ const Project = forwardRef(({ p, i, percentage, priority }, ref) => {
               </Overlay> */}
       </P.Preview>
       <P.Details>
-        <P.Description style={{ "--descFSize": `${interps.descFSize}px` }}>
-          {p.description}
-        </P.Description>
+        <P.Description>{p.description}</P.Description>
         <P.LinksWrapper>
           {p.githubSlug && (
             <P.ProjectLink onClick={() => window.open(p.githubSlug)}>

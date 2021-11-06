@@ -1,25 +1,31 @@
 import styled from "styled-components";
 import { lerp } from "../utilities/math";
+import { clampedLerp } from "../utilities/styledUtilities";
 
 export const getProjectInterpolations = (percentage) => ({
-  padding: lerp(percentage, 20, 40),
-  paddingBottom: lerp(percentage, 10, 30),
-  titleFSize: lerp(percentage, 20, 38),
-  descFSize: lerp(percentage, 14, 18),
   githubSize: lerp(percentage, 18, 22),
   externalLinkSize: lerp(percentage, 20, 24),
 });
 
 export const Project = styled.article`
+  @media (min-width: 992px) {
+    padding: ${clampedLerp(20, 40, 900, 1800, "px")};
+    padding-bottom: ${clampedLerp(10, 30, 900, 1800, "px")};
+  }
+
+  padding: ${clampedLerp(20, 40, 480, 992, "px")};
+  padding-bottom: ${clampedLerp(10, 30, 480, 992, "px")};
   background-color: ${({ color }) => color};
-  padding: var(--padding);
-  padding-bottom: var(--paddingBottom);
 `;
 
 export const Title = styled.h3`
+  @media (min-width: 992px) {
+    font-size: ${clampedLerp(20, 38, 900, 1800, "px")};
+  }
+
   font-family: "Work sans", sans-serif;
   font-weight: 400;
-  font-size: var(--titleFSize);
+  font-size: ${clampedLerp(20, 38, 480, 992, "px")};
   color: #fafafa;
 
   display: flex;
@@ -60,12 +66,15 @@ export const Details = styled.section`
 `;
 
 export const Description = styled.section`
-  opacity: 60%;
+  @media (min-width: 992px) {
+    font-size: ${clampedLerp(14, 18, 900, 1800, "px")};
+  }
 
   font-family: "Work sans", sans-serif;
   font-weight: 500;
-  font-size: var(--descFSize);
+  font-size: ${clampedLerp(14, 18, 480, 992, "px")};
   color: #fafafa;
+  opacity: 60%;
 `;
 
 export const LinksWrapper = styled.nav`

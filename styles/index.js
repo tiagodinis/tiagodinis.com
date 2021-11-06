@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export const HomepageWrapper = styled.main`
   @media (min-width: 992px) {
@@ -10,7 +10,7 @@ export const HomepageWrapper = styled.main`
 
   ${({ applyTransitionStyle, width }) => {
     if (applyTransitionStyle)
-      return css`
+      return `
         position: absolute;
         width: ${width}px;
         left: ${width}px;
@@ -19,5 +19,7 @@ export const HomepageWrapper = styled.main`
 `;
 
 export const ProjectsWrapper = styled.div`
-  width: ${({ isSplitLayout }) => (isSplitLayout ? "60%" : "auto")};
+  @media (min-width: 992px) {
+    width: 60%;
+  }
 `;

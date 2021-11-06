@@ -1,18 +1,12 @@
 import styled from "styled-components";
-import { lerp } from "../utilities/math";
-
-export const getHeaderInterpolations = (percentage) => ({
-  headerLeft: lerp(percentage, 44, 90),
-  heroFSize: lerp(percentage, 44, 54),
-  heroLHeight: lerp(percentage, 3.4, 4.2),
-});
+import { clampedLerp } from "../utilities/styledUtilities";
 
 export const Header = styled.header`
   @media (min-width: 992px) {
     width: 40%;
     height: fit-content;
     margin: 0;
-    padding-left: var(--headerLeft);
+    padding-left: ${clampedLerp(44, 90, 900, 1800, "px")};
     position: fixed;
     transform: translateY(calc(100vh - 100% - 10vh));
   }
@@ -28,8 +22,8 @@ export const Slogan = styled.h1`
   }
 
   @media (min-width: 992px) {
-    line-height: var(--heroLHeight);
-    font-size: var(--heroFSize);
+    line-height: ${clampedLerp(54, 67, 900, 1800, "px")};
+    font-size: ${clampedLerp(44, 54, 900, 1800, "px")};
   }
 
   line-height: 2.7rem;

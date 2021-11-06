@@ -172,10 +172,7 @@ export default function About() {
           width={aboutSectionRef.current?.getBoundingClientRect().width}
         >
           {(isSplitLayout || (!isSplitLayout && useProjects)) && (
-            <Header
-              percentage={percentage}
-              goToProjects={useProjects ? null : scrollOutOf}
-            />
+            <Header goToProjects={useProjects ? null : scrollOutOf} />
           )}
 
           <S.ProjectsWrapper isSplitLayout={isSplitLayout}>

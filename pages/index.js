@@ -72,14 +72,13 @@ export default function Home() {
       <MetaHead />
       <S.HomepageWrapper>
         <Header
-          percentage={percentage}
           goToAbout={goToAbout}
           goToProjects={isSplitLayout ? null : scrollToProjects}
         />
 
         {!isSplitLayout && <div ref={afterHeaderEl} />}
 
-        <S.ProjectsWrapper isSplitLayout={isSplitLayout}>
+        <S.ProjectsWrapper>
           <ProjectList elList={elList.current} percentage={percentage} />
         </S.ProjectsWrapper>
       </S.HomepageWrapper>
