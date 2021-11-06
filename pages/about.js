@@ -1,7 +1,6 @@
 import { useRouter } from "next/dist/client/router";
 import useWindowSize from "../utilities/custom_hooks/useWindowSize";
 import { useLayoutEffect, useRef, useState } from "react";
-import { clamp, getPercentage } from "../utilities/math";
 import { lerp, ease } from "../utilities/math";
 import { Shake2D } from "../utilities/shake2d";
 import MetaHead from "../components/MetaHead";
@@ -9,6 +8,7 @@ import Header from "../components/Header";
 import AboutSection from "../components/AboutSection";
 import ProjectList from "../components/ProjectList";
 import * as S from "../styles";
+import { breakpoints } from "../utilities/styledUtilities";
 
 export default function About() {
   const router = useRouter();
@@ -17,8 +17,7 @@ export default function About() {
   const index = parseInt(router.query.index || 0);
   const offset = useRef(parseInt(router.query.offset || 0));
   const { width } = useWindowSize();
-  const [isSplitLayout, setIsSplitLayout] = useState(false);
-  const [percentage, setPercentage] = useState(-1);
+  const isSplitLayout = width >= breakpoints.desktop;
   const [useProjects, setUseProjects] = useState(fromHome);
   const [animFinished, setAnimFinished] = useState(!fromHome);
 
@@ -26,21 +25,12 @@ export default function About() {
   const aboutSectionRef = useRef();
 
   useLayoutEffect(() => {
-    // Set layout and corresponding interpolation percentage
-    const newIsSplitLayout = width >= 992;
-    setIsSplitLayout(newIsSplitLayout);
-    const percentageRange = newIsSplitLayout ? [900, 1800] : [480, 992];
-    setPercentage(clamp(getPercentage(width, ...percentageRange), 0, 1));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width]);
-
-  useLayoutEffect(() => {
-    if (percentage >= 0 && !animFinished) {
+    if (width && !animFinished) {
       if (fromHome && isSplitLayout) scrollInto();
       else if (fromHome && !isSplitLayout) scrollIntoHorizontal();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [percentage]);
+  }, [width]);
 
   const scrollInto = () =>
     animateScroll(

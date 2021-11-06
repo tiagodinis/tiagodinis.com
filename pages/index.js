@@ -1,25 +1,20 @@
 import useWindowSize from "../utilities/custom_hooks/useWindowSize";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useRouter } from "next/dist/client/router";
 import MetaHead from "../components/MetaHead";
 import Header from "../components/Header";
 import ProjectList from "../components/ProjectList";
 import * as S from "../styles";
+import { breakpoints } from "../utilities/styledUtilities";
 
 export default function Home() {
   const { width } = useWindowSize();
-  const [isSplitLayout, setIsSplitLayout] = useState(false);
+  const isSplitLayout = width >= breakpoints.desktop;
   const router = useRouter();
   const observer = useRef();
   const elList = useRef([]);
   const topmostVisibleIndex = useRef(0);
   const afterHeaderEl = useRef();
-
-  // Set layout
-  useLayoutEffect(() => {
-    setIsSplitLayout(width >= 992);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width]);
 
   // When returning to this page, set scroll position to the one being used before leaving
   useLayoutEffect(() => {
@@ -28,8 +23,9 @@ export default function Home() {
     let top = elList.current[router.query.index].getBoundingClientRect().top;
     let scrollTarget = Math.round(top + parseInt(router.query.offset));
     window.scrollTo({ top: scrollTarget, behavior: "instant" });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSplitLayout]);
+  }, [width]);
 
   // Observe project refs and keep a register of the topmost visible one
   useEffect(() => {
