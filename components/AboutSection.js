@@ -13,7 +13,6 @@ const AboutSection = forwardRef(
     return (
       <A.About
         ref={ref}
-        isSplitLayout={isSplitLayout}
         applyTransitionStyle={applyTransitionStyle}
         width={width}
         offset={offset}

@@ -1,7 +1,6 @@
 import useWindowSize from "../utilities/custom_hooks/useWindowSize";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/dist/client/router";
-import { clamp, getPercentage } from "../utilities/math";
 import MetaHead from "../components/MetaHead";
 import Header from "../components/Header";
 import ProjectList from "../components/ProjectList";
@@ -10,19 +9,15 @@ import * as S from "../styles";
 export default function Home() {
   const { width } = useWindowSize();
   const [isSplitLayout, setIsSplitLayout] = useState(false);
-  const [percentage, setPercentage] = useState(0);
   const router = useRouter();
   const observer = useRef();
   const elList = useRef([]);
   const topmostVisibleIndex = useRef(0);
   const afterHeaderEl = useRef();
 
-  // Set layout and corresponding interpolation percentage
+  // Set layout
   useLayoutEffect(() => {
-    const newIsSplitLayout = width >= 992;
-    setIsSplitLayout(newIsSplitLayout);
-    const percentageRange = newIsSplitLayout ? [900, 1800] : [480, 992];
-    setPercentage(clamp(getPercentage(width, ...percentageRange), 0, 1));
+    setIsSplitLayout(width >= 992);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
 
@@ -79,7 +74,7 @@ export default function Home() {
         {!isSplitLayout && <div ref={afterHeaderEl} />}
 
         <S.ProjectsWrapper>
-          <ProjectList elList={elList.current} percentage={percentage} />
+          <ProjectList elList={elList.current} />
         </S.ProjectsWrapper>
       </S.HomepageWrapper>
     </>

@@ -1,7 +1,7 @@
 import Project, { projectsData } from "../components/Project";
 import styled from "styled-components";
 
-export default function ProjectList({ elList, topmostIndex, percentage }) {
+export default function ProjectList({ elList, topmostIndex }) {
   return (
     <>
       <article>
@@ -11,7 +11,6 @@ export default function ProjectList({ elList, topmostIndex, percentage }) {
             key={p.name}
             p={p}
             i={i + (topmostIndex ? topmostIndex : 0)}
-            percentage={percentage}
             priority={i === 0}
           />
         ))}

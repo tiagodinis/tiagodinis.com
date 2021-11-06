@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { breakpoints } from "../utilities/styledUtilities";
 
 export default function AboutValue({ valueData }) {
   return (
@@ -20,7 +21,7 @@ const Title = styled.h3`
 `;
 
 const QuoteWrapper = styled.div`
-  @media (min-width: 420px) {
+  @media (min-width: ${breakpoints.tablet}px) {
     position: relative;
     top: -3px;
 

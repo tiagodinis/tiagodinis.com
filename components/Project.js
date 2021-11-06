@@ -5,9 +5,7 @@ import ExternalLinkSVG from "../components/svg/ExternalLinkSVG";
 import styles from "../styles/previewImage.module.css";
 import * as P from "../styles/project";
 
-const Project = forwardRef(({ p, i, percentage, priority }, ref) => {
-  const interps = P.getProjectInterpolations(percentage);
-
+const Project = forwardRef(({ p, i, priority }, ref) => {
   return (
     <P.Project ref={ref} color={p.bgColor}>
       <P.Title>
@@ -32,17 +30,14 @@ const Project = forwardRef(({ p, i, percentage, priority }, ref) => {
         <P.Description>{p.description}</P.Description>
         <P.LinksWrapper>
           {p.githubSlug && (
-            <P.ProjectLink onClick={() => window.open(p.githubSlug)}>
-              <GithubSVG dim={interps.githubSize || 18} color={"#fafafa"} />
-            </P.ProjectLink>
+            <P.GithubLink onClick={() => window.open(p.githubSlug)}>
+              <GithubSVG />
+            </P.GithubLink>
           )}
           {p.externalLink && (
-            <P.ProjectLink onClick={() => window.open(p.externalLink)}>
-              <ExternalLinkSVG
-                dim={interps.externalLinkSize || 20}
-                color={"#fafafa"}
-              />
-            </P.ProjectLink>
+            <P.ExternalLink onClick={() => window.open(p.externalLink)}>
+              <ExternalLinkSVG />
+            </P.ExternalLink>
           )}
         </P.LinksWrapper>
       </P.Details>

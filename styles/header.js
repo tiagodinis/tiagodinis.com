@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { clampedLerp } from "../utilities/styledUtilities";
+import { breakpoints, clampedLerp } from "../utilities/styledUtilities";
 
 export const Header = styled.header`
-  @media (min-width: 992px) {
+  @media (min-width: ${breakpoints.desktop}px) {
     width: 40%;
     height: fit-content;
     margin: 0;
@@ -16,12 +16,12 @@ export const Header = styled.header`
 `;
 
 export const Slogan = styled.h1`
-  @media (min-width: 480px) {
+  @media (min-width: ${breakpoints.tablet}px) {
     line-height: 3.4rem;
     font-size: 44px;
   }
 
-  @media (min-width: 992px) {
+  @media (min-width: ${breakpoints.desktop}px) {
     line-height: ${clampedLerp(54, 67, 900, 1800, "px")};
     font-size: ${clampedLerp(44, 54, 900, 1800, "px")};
   }
@@ -34,7 +34,7 @@ export const Slogan = styled.h1`
 `;
 
 export const About = styled.nav`
-  @media (min-width: 480px) {
+  @media (min-width: ${breakpoints.tablet}px) {
     margin: 50px 0px;
   }
 
@@ -42,7 +42,7 @@ export const About = styled.nav`
     max-width: none;
   }
 
-  @media (min-width: 992px) {
+  @media (min-width: ${breakpoints.desktop}px) {
     max-width: 310px;
   }
 

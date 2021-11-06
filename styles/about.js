@@ -1,9 +1,14 @@
 import styled, { css } from "styled-components";
+import { breakpoints } from "../utilities/styledUtilities";
 
 const titlePadding = 20;
 const valuesTitleColor = "#4a4a4a";
 
 export const About = styled.main`
+  @media (min-width: ${breakpoints.desktop}px) {
+    padding-bottom: 0px;
+  }
+
   ${({ applyTransitionStyle, offset }) => {
     if (applyTransitionStyle)
       return css`
@@ -13,7 +18,6 @@ export const About = styled.main`
   }}
 
   padding: 32px;
-  padding-bottom: ${({ isSplitLayout }) => (isSplitLayout ? 0 : 32)}px;
   min-height: 100vh;
   background-color: #f1f1f1;
   line-height: 26px;

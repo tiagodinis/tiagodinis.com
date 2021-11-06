@@ -1,38 +1,24 @@
 import styled from "styled-components";
-import { lerp } from "../utilities/math";
-import { clampedLerp } from "../utilities/styledUtilities";
-
-export const getProjectInterpolations = (percentage) => ({
-  githubSize: lerp(percentage, 18, 22),
-  externalLinkSize: lerp(percentage, 20, 24),
-});
+import { breakpoints, responsiveLerp } from "../utilities/styledUtilities";
 
 export const Project = styled.article`
-  @media (min-width: 992px) {
-    padding: ${clampedLerp(20, 40, 900, 1800, "px")};
-    padding-bottom: ${clampedLerp(10, 30, 900, 1800, "px")};
-  }
+  ${responsiveLerp("padding", 20, 40)}
+  ${responsiveLerp("padding-bottom", 10, 30)}
 
-  padding: ${clampedLerp(20, 40, 480, 992, "px")};
-  padding-bottom: ${clampedLerp(10, 30, 480, 992, "px")};
   background-color: ${({ color }) => color};
 `;
 
 export const Title = styled.h3`
-  @media (min-width: 992px) {
-    font-size: ${clampedLerp(20, 38, 900, 1800, "px")};
-  }
-
   font-family: "Work sans", sans-serif;
   font-weight: 400;
-  font-size: ${clampedLerp(20, 38, 480, 992, "px")};
+  ${responsiveLerp("font-size", 20, 38)};
   color: #fafafa;
 
   display: flex;
 `;
 
 export const Index = styled.span`
-  @media (min-width: 480px) {
+  @media (min-width: ${breakpoints.tablet}px) {
     position: absolute; /* "Take out" of flexbox */
   }
 
@@ -40,14 +26,14 @@ export const Index = styled.span`
 `;
 
 export const Name = styled.span`
-  @media (min-width: 480px) {
+  @media (min-width: ${breakpoints.tablet}px) {
     width: 70%;
     margin: auto;
   }
 `;
 
 export const Preview = styled.section`
-  @media (min-width: 480px) {
+  @media (min-width: ${breakpoints.tablet}px) {
     width: 70%;
   }
 
@@ -56,7 +42,7 @@ export const Preview = styled.section`
 `;
 
 export const Details = styled.section`
-  @media (min-width: 480px) {
+  @media (min-width: ${breakpoints.tablet}px) {
     width: 70%;
     margin: 0% auto;
   }
@@ -66,13 +52,9 @@ export const Details = styled.section`
 `;
 
 export const Description = styled.section`
-  @media (min-width: 992px) {
-    font-size: ${clampedLerp(14, 18, 900, 1800, "px")};
-  }
-
   font-family: "Work sans", sans-serif;
   font-weight: 500;
-  font-size: ${clampedLerp(14, 18, 480, 992, "px")};
+  ${responsiveLerp("font-size", 14, 18)};
   color: #fafafa;
   opacity: 60%;
 `;
@@ -81,9 +63,13 @@ export const LinksWrapper = styled.nav`
   display: flex;
 `;
 
-export const ProjectLink = styled.a`
+const ProjectLink = styled.a`
   margin-left: 8px;
   opacity: 60%;
+
+  svg {
+    fill: #fafafa;
+  }
 
   &:hover {
     cursor: pointer;
@@ -91,6 +77,20 @@ export const ProjectLink = styled.a`
   }
 
   transition: opacity 0.2s ease;
+`;
+
+export const GithubLink = styled(ProjectLink)`
+  svg {
+    ${responsiveLerp("width", 18, 22)};
+    ${responsiveLerp("height", 18, 22)};
+  }
+`;
+
+export const ExternalLink = styled(ProjectLink)`
+  svg {
+    ${responsiveLerp("width", 20, 24)};
+    ${responsiveLerp("height", 20, 24)};
+  }
 `;
 
 // export const Overlay = styled.div`

@@ -177,9 +177,7 @@ export default function About() {
 
           <S.ProjectsWrapper isSplitLayout={isSplitLayout}>
             {isSplitLayout && About}
-            {useProjects && (
-              <ProjectList topmostIndex={index} percentage={percentage} />
-            )}
+            {useProjects && <ProjectList topmostIndex={index} />}
           </S.ProjectsWrapper>
         </S.HomepageWrapper>
       </div>
