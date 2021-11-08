@@ -88,7 +88,7 @@ export const projectsData = [
   {
     name: "KENDO WARRIORS",
     description: "Kendo themed mini-game",
-    externalLink: "https://i.imgur.com/AXn859r.gif",
+    externalLink: "https://insofrido.itch.io/kendo-warriors-minigame",
     imgPath: kendo,
     imgAlt:
       "Two kendokas fight - the one to the right blocks the opponent's strike to his head",
