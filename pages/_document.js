@@ -32,6 +32,10 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, maximum-scale=1.0"
+          />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"
