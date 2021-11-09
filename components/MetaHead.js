@@ -6,6 +6,7 @@ export default function MetaHead() {
       <title>Tiago Dinis</title>
       <meta name="keywords" content="projects portfolio" />
       <meta name="description" content="Tiago Dinis' personal website." />
+      <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0" />
 
       <link
         rel="apple-touch-icon"
