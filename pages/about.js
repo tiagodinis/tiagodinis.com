@@ -1,6 +1,6 @@
 import { useRouter } from "next/dist/client/router";
 import useWindowSize from "../utilities/custom_hooks/useWindowSize";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { lerp, ease } from "../utilities/math";
 import { Shake2D } from "../utilities/shake2d";
 import MetaHead from "../components/MetaHead";
@@ -20,9 +20,20 @@ export default function About() {
   const isSplitLayout = width >= breakpoints.desktop;
   const [useProjects, setUseProjects] = useState(fromHome);
   const [animFinished, setAnimFinished] = useState(!fromHome);
+  const [isTouchScreen, setIsTouchScreen] = useState(false);
 
   const shakeableEl = useRef();
   const aboutSectionRef = useRef();
+
+  useLayoutEffect(() => {
+    const touchScreen =
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      navigator.msMaxTouchPoints > 0;
+    setIsTouchScreen(touchScreen);
+    setUseProjects(!touchScreen);
+    setAnimFinished(touchScreen);
+  }, []);
 
   useLayoutEffect(() => {
     if (width && !animFinished) {
@@ -144,7 +155,13 @@ export default function About() {
       ref={aboutSectionRef}
       isSplitLayout={isSplitLayout}
       applyTransitionStyle={!isSplitLayout && useProjects}
-      scrollOutOf={isSplitLayout ? scrollOutOf : scrollOutOfHorizontal}
+      scrollOutOf={
+        isSplitLayout
+          ? scrollOutOf
+          : isTouchScreen
+          ? () => router.push(`/`)
+          : scrollOutOfHorizontal
+      }
       width={shakeableEl.current?.getBoundingClientRect().width}
       offset={offset.current}
     />
