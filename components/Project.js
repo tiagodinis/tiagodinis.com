@@ -48,15 +48,26 @@ const Project = forwardRef(({ p, i, priority }, ref) => {
 Project.displayName = "Project";
 export default Project;
 
+import minesweeper from "../public/project_previews/minesweeper.png";
 import flashcards from "../public/project_previews/notion_flashcards.png";
-import calculator from "../public/project_previews/calculator.png";
 import insofrido from "../public/project_previews/insofrido_elites.png";
+import calculator from "../public/project_previews/calculator.png";
 import kendo from "../public/project_previews/kendo_block.png";
 import deltanaut from "../public/project_previews/deltanaut.png";
 import telewarper from "../public/project_previews/telewarper.jpg";
 import particles from "../public/project_previews/particles.png";
 
 export const projectsData = [
+  {
+    name: "MINESWEEPER",
+    description: "The classic minesweeper game",
+    githubSlug: "https://github.com/tiagodinis/minesweeper",
+    externalLink: "https://tinysweeper.netlify.app/",
+    imgPath: minesweeper,
+    imgAlt:
+      "A minesweeper game over screen (after a mine reveal) on easy difficulty",
+    bgColor: "#1a1a1a",
+  },
   {
     name: "NOTION FLASHCARDS",
     description: "Spaced repetition flashcard app",
@@ -67,6 +78,16 @@ export const projectsData = [
     bgColor: "#8575d0",
   },
   {
+    name: "INSOFRIDO.COM",
+    description: "Written & Interactive poetry site",
+    githubSlug: "https://github.com/tiagodinis/insofrido",
+    externalLink: "https://insofrido.netlify.app/",
+    imgPath: insofrido,
+    imgAlt:
+      "An interactive poem where dots animate from a selection of user choices",
+    bgColor: "#d1aaac",
+  },
+  {
     name: "POCKET CALCULATOR",
     description: "A simple calculator app",
     githubSlug: "https://github.com/tiagodinis/calculator",
@@ -74,16 +95,6 @@ export const projectsData = [
     imgPath: calculator,
     imgAlt: "An expression example on the calculator",
     bgColor: "#47414e",
-  },
-  {
-    name: "INSOFRIDO.COM",
-    description: "Written & Interactive poetry site",
-    githubSlug: "https://github.com/tiagodinis/insofrido",
-    externalLink: "https://insofrido.com",
-    imgPath: insofrido,
-    imgAlt:
-      "An interactive poem where dots animate from a selection of user choices",
-    bgColor: "#d1aaac",
   },
   {
     name: "KENDO WARRIORS",
